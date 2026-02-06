@@ -2,8 +2,8 @@
  * NBA Park Arduino Library
  * Description: Declarations of classes and structs
  * Author: José Paulo Seibt Neto
- * Created: Fev - 2025
- * Last Modified: Jul - 2025
+ * Created: Feb - 2025
+ * Last Modified: Feb - 2026
 */
 
 #ifndef NBAPARK_H
@@ -95,6 +95,8 @@
 #define BUTTON_RELEASE_WINDOW 2000U        // Value in milliseconds
 #define SECS_24H 86400UL
 #define SECS_1H 3600UL
+#define SECONDS true // Timer.get_elapsed_time() method
+#define MILLIS false // Timer.get_elapsed_time() method
 
 // Helper struct for buttons
 struct Button
@@ -109,7 +111,7 @@ struct Button
 
     Button(uint8_t in_pin) : pin(in_pin), state(0), release_time(UINT16_MAX), press_millis_start(0) //, curr_press_dur(0)
     {
-        pinMode(pin, INPUT);
+        pinMode(pin, INPUT_PULLUP);
     }
 
     // Return the release time of the press, zero otherwise
@@ -157,6 +159,7 @@ public:
     // Methods
     uint32_t reset();
     uint32_t get_elapsed_time(bool seconds=true) const;
+    void hang(uint32_t in_amt) const; // Hang for in_amt milliseconds
 };
 
 

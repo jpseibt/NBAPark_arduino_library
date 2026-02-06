@@ -21,6 +21,7 @@ Timer high_score_timer;  // Instance used to reset the high score of the game or
 Timer game_timer;        // Instance used to setup game logic such as the valid sensors to check at any given time
 uint32_t now;
 
+
 // MVP hoops and sensors
 MVPHoops mvp_hoops;
 BitmapPattern curr_mvp_pattern;

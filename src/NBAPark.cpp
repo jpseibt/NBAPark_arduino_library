@@ -2,8 +2,8 @@
  * NBA Park Arduino Library
  * Description: Definitions of the classes and structs from NBAPark.h
  * Author: José Paulo Seibt Neto
- * Created: Fev - 2025
- * Last Modified: Jul - 2025
+ * Created: Feb - 2025
+ * Last Modified: Feb - 2026
 */
 
 #include "NBAPark.h"
@@ -31,6 +31,20 @@ uint32_t Timer::get_elapsed_time(bool seconds) const
         elapsed /= 1000; // Converts to seconds
 
     return elapsed;
+}
+
+void Timer::hang(uint32_t in_amt) const
+{
+    uint32_t start = millis();
+    uint32_t offset = UINT32_MAX - start;
+    uint32_t now, elapsed;
+
+    do
+    {
+        now = millis();
+        elapsed = (now >= start) ? (now - start) : (offset + now);
+    }
+    while (elapsed < in_amt);
 }
 // Timer (end)
 
