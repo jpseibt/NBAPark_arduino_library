@@ -90,7 +90,6 @@ void setup()
     esp_task_wdt_add(NULL);
 }
 
-// Prints on the Serial Monitor information about receiving OSC messages for DELAY seconds then pauses the loop for another DELAY seconds
 void loop()
 {
     esp_task_wdt_reset();
@@ -157,7 +156,6 @@ void loop()
 }
 
 
-// Send OSC message to change the value in the High Score or Score text block in Resolume Arena
 void send_msg_to_resolume()
 {
     if (WiFi.status() != WL_CONNECTED) { return; }
