@@ -15,8 +15,9 @@
 #include <WiFiUdp.h>
 #include <esp_task_wdt.h>
 
-#define JP_ADDRESS "/composition/layers/3/clips/2/connect"
+#define BUZZER_ADDRESS "/composition/layers/42/clips/1/connect"
 #define BUZZER_PIN 23
+#define ACTIVE 0
 #define CONNECTION_TIMEOUT 60 /* Amount of time (sec) until rebooting if WiFi connection fail on setup() */
 #define WDOG_TIMEOUT_AMT 8    /* Watch Dog timeout (secs) */
 #define AMT_STATE_CHECKS 3    /* Amount of checks needed to trigger the buzzer (OSC send) */
@@ -81,8 +82,8 @@ void setup()
     pinMode(BUZZER_PIN, INPUT_PULLUP);
 
     state_count = 0;
-    last_state = HIGH;
-    state = HIGH;
+    last_state = !ACTIVE;
+    state = !ACTIVE;
     trigger_buzzer = false;
 
     // Watch dog setup
@@ -95,8 +96,6 @@ void loop()
     esp_task_wdt_reset();
 
     state = digitalRead(BUZZER_PIN);
-    //debugSkt(state);
-    //debugSktln();
 
     // Check WiFi connection and print status every 4 seconds
     if (timer.get_elapsed_time(SECONDS) > 4)
@@ -129,13 +128,13 @@ void loop()
         }
     }
 
-    if (trigger_buzzer == false && last_state == HIGH && state == LOW)
+    if (trigger_buzzer == false && last_state != ACTIVE && state == ACTIVE)
     {
         state_count = 0;
         for (int i = 0; i < AMT_STATE_CHECKS; ++i)
         {
             timer.hang(STATE_CHECK_DELAY);
-            if (digitalRead(BUZZER_PIN) == LOW)
+            if (digitalRead(BUZZER_PIN) == ACTIVE)
             {
                 ++state_count;
             }
@@ -162,11 +161,11 @@ void send_msg_to_resolume()
 
     char osc_message_buffer[255] = {0};
 
-    snprintf(osc_message_buffer, sizeof(osc_message_buffer), JP_ADDRESS);
+    snprintf(osc_message_buffer, sizeof(osc_message_buffer), BUZZER_ADDRESS);
     OSCPark msg(osc_message_buffer);
 
     debugSkt("Sending OSC to: ");
-    debugSkt(JP_ADDRESS);
+    debugSkt(BUZZER_ADDRESS);
     debugSktln();
 
     // Send message through EthernetUDP global instance

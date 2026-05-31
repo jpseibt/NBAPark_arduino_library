@@ -4,7 +4,7 @@
 #include <NBAPark.h>
 
 #define WAIT_BTN 4
-#define START_BTN 9
+#define START_BTN 5
 #define ACTIVE LOW
 
 enum Command : uint8_t
